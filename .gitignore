@@ -1,1 +1,5 @@
-.idea
+*pycache
+*checkpoint.ipynb
+*venv*
+~$*
+.idea/
