@@ -2,4 +2,6 @@
 *checkpoint.ipynb
 *venv*
 ~$*
-.idea/
+.*
+data/
+lightning_logs/
