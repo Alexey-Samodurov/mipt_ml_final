@@ -5,3 +5,5 @@
 .*
 data/
 lightning_logs/
+*.xml
+*.pyc
