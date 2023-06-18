@@ -5,4 +5,7 @@ scikit-learn==1.1.2
 pandas==1.4.4
 tqdm==4.65.0
 fastapi==0.97.0
+unicorn==1.0.3
+uvloop==0.17.0
+httptools==0.1.2
 kaggle==1.5.13
