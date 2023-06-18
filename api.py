@@ -25,7 +25,7 @@ class Predictor:
 
     def predict(self, text):
         encoded_text = self.tokenizer.encode_plus(
-            text,
+            text.lower(),
             max_length=MAX_LEN,
             truncation=True,
             padding='max_length',
@@ -68,10 +68,3 @@ async def predict(request: Request, model: Predictor = Depends(get_model)):
     return Response(
         response=response
     )
-
-
-if __name__ == '__main__':
-    import requests
-
-    r = requests.post('http://127.0.0.1:8001/predict', data=json.dumps({'text': 'I hate this hotel!'}))
-    print(r.json())
