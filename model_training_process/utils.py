@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import BertTokenizer
 
-from tripadviser_dataset import TripAdvisorDataset
+from model_training_process.tripadviser_dataset import TripAdvisorDataset
 
 
 def read_data(csv_path: Union[Path, str]) -> pd.DataFrame:
@@ -40,6 +40,13 @@ def preprocess_data(review: pd.Series, max_len: int = 400) -> pd.Series:
 
 
 def create_data_loader(df, tokenizer, max_len, batch_size) -> DataLoader:
+    """Create torch data loader from pandas DataFrame
+
+    :param df: pandas DataFrame with data
+    :param tokenizer: tokenizer to use
+    :param max_len: maximum length of review text
+    :param batch_size: batch size
+    """
     ds = TripAdvisorDataset(
         reviews=df.review_full.to_numpy(),
         targets=df.rating_review.to_numpy(),
@@ -53,7 +60,14 @@ def create_dataloaders(tokenizer: BertTokenizer,
                        max_len: int,
                        bach_size: int,
                        random_seed: int) -> Tuple[DataLoader, DataLoader, DataLoader, int, int]:
-    df_train = read_data(Path('..') / 'data' / 'New_Delhi_reviews.csv')
+    """Create train, test and validation torch data loaders
+    :param tokenizer: tokenizer to use
+    :param max_len: maximum length of review text
+    :param bach_size: batch size
+    :param random_seed: random seed
+    :return: train, test and validation torch data loaders
+    """
+    df_train = read_data(Path('.') / 'data' / 'New_Delhi_reviews.csv')
     df_train['review_full'] = preprocess_data(df_train['review_full'])
     df_train, df_test = train_test_split(df_train, test_size=0.2, random_state=random_seed)
     df_val, df_test = train_test_split(df_test, test_size=0.5, random_state=random_seed)
@@ -72,6 +86,18 @@ def train_epoch(
         scheduler,
         n_examples
 ):
+    """
+    Train model
+
+    :param model: model to train
+    :param data_loader: torch data loader
+    :param loss_fn: loss function
+    :param optimizer: optimizer
+    :param device: device to use can be 'cpu' or 'cuda'
+    :param scheduler: scheduler
+    :param n_examples: number of examples
+    :return: accuracy and loss
+    """
     model = model.train()
     losses = []
     correct_predictions = 0
@@ -93,6 +119,16 @@ def train_epoch(
 
 
 def eval_model(model, data_loader, loss_fn, device, n_examples):
+    """
+    Evaluate model
+
+    :param model: model to evaluate
+    :param data_loader: torch data loader
+    :param loss_fn: loss function
+    :param device: device to use can be 'cpu' or 'cuda'
+    :param n_examples: number of examples
+    :return: accuracy and loss
+    """
     model = model.eval()
     losses = []
     correct_predictions = 0
