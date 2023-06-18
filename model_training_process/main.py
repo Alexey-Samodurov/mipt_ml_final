@@ -6,9 +6,8 @@ from torch import nn
 from torch.optim import AdamW
 from transformers import BertTokenizer, get_linear_schedule_with_warmup
 
-from tripadviser_classifier import TripAdvisorClassifier
-from utils import train_epoch, eval_model, create_dataloaders
-
+from model_training_process.tripadviser_classifier import TripAdvisorClassifier
+from model_training_process.utils import create_dataloaders, train_epoch, eval_model
 
 PRE_TRAINED_MODEL_NAME = 'bert-base-uncased'
 RANDOM_SEED = 42
@@ -70,7 +69,3 @@ def run(max_len: int = MAX_LEN,
         if train_acc > best_accuracy:
             torch.save(model.state_dict(), 'best_model_state.bin')
             best_accuracy = train_acc
-
-
-if __name__ == '__main__':
-    run()
