@@ -32,6 +32,7 @@ docker run -p 8001:8001 fastapi:api
 ## Test, how it works.
 ```
 import requests
+import json
 
 r = requests.post('http://127.0.0.1:8001/predict', 
                   data=json.dumps({'text': 'I hate this hotel!'}))
