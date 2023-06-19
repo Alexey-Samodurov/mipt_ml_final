@@ -1,9 +1,9 @@
 *pycache
 *checkpoint.ipynb
 *venv*
-~$*
-.*
-data/
-lightning_logs/
 *.xml
 *.pyc
+~$*
+.idea
+data
+lightning_logs
