@@ -13,7 +13,8 @@ class TripAdvisorDataset(Dataset):
     :param reviews: reviews data as pd.Series
     :param targets: targets data as pd.Series
     :param tokenizer: tokenizer from transformers library
-    :param max_len: maximum length of review text"""
+    :param max_len: maximum length of review text
+    """
 
     def __init__(self, reviews: pd.Series, targets: pd.Series, tokenizer: BertTokenizer, max_len: int):
         self.reviews = reviews
