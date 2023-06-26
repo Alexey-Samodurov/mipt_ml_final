@@ -10,6 +10,8 @@ from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import BertTokenizer
+import nltk
+from nltk.corpus import stopwords
 
 from model_training_process.tripadviser_dataset import TripAdvisorDataset
 
@@ -29,11 +31,14 @@ def preprocess_data(review: pd.Series, max_len: int = 400) -> pd.Series:
     :param max_len: maximum length of review text
     :param review: series with rewie data needs to be cleaned
     """
+    nltk.download('stopwords')
+    stop_words = stopwords.words('english')
     patterns = [['&#039;', ''], [r'[^\w\d\s]', ' '], [r'[^\x00-\x7F]+', ' '],
                 [r'^\s+|\s+?$', ''], [r'\s+', ' '], [r'\.{2,}', ' ']]
     review = review.str.lower()
     for patt in tqdm(patterns, desc='Cleaning data'):
         review = review.str.replace(*patt, regex=True)
+    review = review.apply(lambda x: ' '.join(x for x in x.split() if x not in stop_words))
     review = review.apply(lambda x: ' '.join(x.split()[:max_len]) if len(x.split()) > max_len else x)
     review = review.apply(lambda x: ' '.join(x.split() if len(x.split()) > 1 else x))
     return review
